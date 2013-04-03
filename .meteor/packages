@@ -15,3 +15,5 @@ bootboxjs
 bootstrap-growl
 accounts-google
 accounts-twitter
+force-ssl
+email
