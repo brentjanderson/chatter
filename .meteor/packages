@@ -13,3 +13,5 @@ accounts-base
 bootstrap
 bootboxjs
 bootstrap-growl
+accounts-google
+accounts-twitter
