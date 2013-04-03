@@ -1,0 +1,54 @@
+<head>
+  <title>IS Chatter</title>
+</head>
+
+<body>
+    
+    <div class="container-fluid">
+        <div class="">{{loginButtons}}</div>
+        <h1>IS Chatter</h1>
+        
+        <div class="row-fluid">
+            {{#if currentUser}}
+                <div class="span4">
+                    {{> chatrooms}}
+                </div>
+                <div class="span8">
+                    {{> chatMain}}
+                </div>
+            {{else}}
+                <h2 class="text-center well">Login to join a chatroom</h2>
+            {{/if}}
+        </div>
+</body>
+
+
+<template name="chatrooms">
+    <ul class="nav nav-list well">
+        <li class="nav-header">Chat Rooms</li>
+        {{#each rooms}}
+            <li><a href="#">{{name}}</a></li>
+        {{/each}}
+        <li class="nav-header"><i class="icon-cog"></i> Tools</li>
+        <a href="#" class="btn create-room">Create room</a>
+    </ul>
+</template>
+
+<template name="chatMain">
+    {{#if currentRoom}}
+        <h1>{{currentRoom.name}}</h1>
+        <form class="form-inline">
+            <label for="message">Message: <input type="text" name="message" /></label>
+            <a href="#" class="message btn btn-success"><i class="icon-white icon-comment"></i> Post Message</a>
+        </form>
+        <ul class="unstyled">
+            {{#each messages}}
+                <li>
+                    <p><strong><i class="icon-user"></i> {{user.name}}:</strong>{{content}}<small class="pull-right">{{date}}</small></p>
+                </li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <h2 class="text-center well">Select or create a room to join a conversation!</h2>
+    {{/if}}
+</template>
