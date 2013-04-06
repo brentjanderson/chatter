@@ -1,16 +1,28 @@
 (function (){
     'use strict';
-    // @TODO implement global user search to not throw errors when we view messages from users that aren't us.
+
     var autorunHandle;
     var messagesSubscription;
+    var userSubscription;
     var messagesWatcher;
+    
+    function fetchUserName(doc) {
+      if (doc.name) {
+        return doc.name;
+      } else if (doc.profile && doc.profile.name) {
+        return doc.profile.name;
+      } else if (doc.emails[0] && doc.emails[0].address){
+        return doc.emails[0].address;
+      }
+      return "Anonymous";
+    };
     
     Template.chatMain.messages = function() {
         return Messages.find({roomId: Session.get("currentRoom")}, { sort: [ ["date", "desc"] ],
             transform: function(doc) {
                 var userObj = Meteor.users.findOne(doc.userId);
                 var user = {};
-                user.name = (userObj.name !== undefined) ? userObj.name : userObj.emails[0].address;
+                user.name = fetchUserName(userObj);
                 user._id = userObj._id;
                 doc.user = user;
                 doc.date = (new Date(doc.date)).toLocaleString();
@@ -21,6 +33,7 @@
     
     Template.chatMain.created = function() {
         autorunHandle = Deps.autorun(function() {
+            userSubscription = Meteor.subscribe("users");
             messagesSubscription = Meteor.subscribe("messages", Session.get("currentRoom"));
             
             var timeCheck = (new Date()).getTime();
@@ -58,6 +71,7 @@
         autorunHandle.stop();
         messagesSubscription.stop();
         messagesWatcher.stop();
+        userSubscription.stop();
     };
     
     Template.chatMain.currentRoom = function() {

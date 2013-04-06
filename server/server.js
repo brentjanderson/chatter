@@ -1,6 +1,8 @@
 (function() {
     'use strict';
     
+    // var Users = new Meteor.Collection("users");
+    
     Meteor.publish("rooms", function() {
         return Rooms.find();
     });
@@ -24,5 +26,9 @@
         insert: function(userId, room) {
             return true;
         }
-    })
+    });
+    
+    Meteor.publish("users", function() {
+      return Meteor.users.find();
+    });
 }());
